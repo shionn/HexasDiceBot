@@ -28,7 +28,7 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<url>http://HexasWhisp:80/manager/text</url>
+					<url>http://HexasDiceBot:80/manager/text</url>
 					<server>Proxmox</server>
 					<path>/</path>
 					<skipTests>true</skipTests>
@@ -69,12 +69,6 @@
 		</resources>
 
 	</build>
-
-	<profiles>
-		<profile>
-			<id>dev</id>
-		</profile>
-	</profiles>
 
 	<dependencies>
 		<!-- Spring / web -->

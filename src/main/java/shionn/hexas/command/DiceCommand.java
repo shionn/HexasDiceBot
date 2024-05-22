@@ -53,8 +53,12 @@ public class DiceCommand {
 			delay--;
 			if (delay ==0 ) {
 				Collection<Integer> values = dices.values();
-				Integer dice = values.stream().skip(seed.nextInt(values.size())).findFirst().orElse(0);
-				bot.sendMessage(channel, "/me le chat obtiens " + dice);
+				if (values.isEmpty()) {
+					bot.sendMessage(channel, "/me n'as pas eu de lancé ");
+				} else {
+					Integer dice = values.stream().skip(seed.nextInt(values.size())).findFirst().orElse(0);
+					bot.sendMessage(channel, "/me le chat obtiens " + dice);
+				}
 				dices.close();
 			}
 		}
