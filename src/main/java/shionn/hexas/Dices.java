@@ -26,6 +26,7 @@ public class Dices {
 
 	public void close() {
 		mode = DiceMode.CLOSED;
+		dices.clear();
 	}
 
 	public void setMode(DiceMode mode) {
