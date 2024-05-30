@@ -29,6 +29,7 @@ public class ITwitchChatFactory {
 		ITwitchChat client = TwitchChatBuilder.builder().withChatAccount(credential).build();
 		client.joinChannel(channel);
 //		client.getEventManager().onEvent(ChannelMessageEvent.class, messageEventConsumer);
+		// TwitchClientBuilder.builder().withChatAccount(credential).withEnableHelix(true).build().getHelix().creatP;
 		return client;
 	}
 

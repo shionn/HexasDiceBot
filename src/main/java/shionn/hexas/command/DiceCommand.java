@@ -17,6 +17,8 @@ import shionn.hexas.Dices;
 @Component
 @ApplicationScope
 public class DiceCommand {
+	private static final int DELAY = 46;
+
 	private Random seed = new Random();
 
 	@Autowired
@@ -31,19 +33,33 @@ public class DiceCommand {
 
 	private int delay = 0;
 
+	private int heroHab;
+
+	private int monsterHab;
+
 	public void request2D6() {
 		if (dices.getMode() == DiceMode.CLOSED) {
 			dices.setMode(DiceMode.TWO_D6);
-			bot.sendMessage(channel, "> Vous avez 60 secondes pour lancer des !2D6 <");
-			delay = 61;
+			bot.sendMessage(channel, "> Vous avez " + (DELAY - 1) + " secondes pour lancer des !2D6 <");
+			delay = DELAY;
 		}
 	}
 
 	public void requestD6() {
 		if (dices.getMode() == DiceMode.CLOSED) {
 			dices.setMode(DiceMode.D6);
-			bot.sendMessage(channel, "> Vous avez 60 secondes pour lancer des !D6 <");
-			delay = 61;
+			bot.sendMessage(channel, "> Vous avez " + (DELAY - 1) + " secondes pour lancer des !D6 <");
+			delay = DELAY;
+		}
+	}
+
+	public void requestBattleDice(int heroHab, int monsterHab) {
+		if (dices.getMode() == DiceMode.CLOSED) {
+			this.heroHab = heroHab;
+			this.monsterHab = monsterHab;
+			dices.setMode(DiceMode.BATTLE);
+			bot.sendMessage(channel, "> Une passe d'arme commence, lancer des !2D6 <");
+			delay = DELAY;
 		}
 	}
 
@@ -53,12 +69,50 @@ public class DiceCommand {
 			delay--;
 			if (delay ==0 ) {
 				Collection<Integer> values = dices.values();
-				if (values.isEmpty()) {
-					bot.sendMessage(channel, "/me n'as pas eu de lancé ");
-				} else {
-					Integer dice = values.stream().skip(seed.nextInt(values.size())).findFirst().orElse(0);
-					bot.sendMessage(channel, "/me le chat obtiens " + dice);
+				switch (dices.getMode()) {
+					case D6, TWO_D6:
+						if (values.isEmpty()) {
+							bot.sendMessage(channel, "/me n'as pas eu de lancé ");
+						} else {
+							Integer dice = values.stream().skip(seed.nextInt(values.size())).findFirst().orElse(0);
+							bot.sendMessage(channel, "/me le chat obtiens " + dice);
+						}
+						break;
+					case BATTLE:
+						if (values.size() < 2) {
+							bot.sendMessage(channel, "/me n'as pas eu assez de lancé ");
+						} else {
+							Integer hero = values.stream().skip(seed.nextInt(values.size())).findFirst().orElse(0);
+							values.remove(hero);
+							Integer monster = values.stream().skip(seed.nextInt(values.size())).findFirst().orElse(0);
+							StringBuilder message = new StringBuilder().append("Le héro obtiens ")
+									.append(hero)
+									.append("+")
+									.append(heroHab)
+									.append("=")
+									.append(hero + heroHab)
+									.append(" :: ")
+									.append("Le monstre obtiens ")
+									.append(monster)
+									.append("+")
+									.append(monsterHab)
+									.append("=")
+									.append(monster + monsterHab)
+									.append(" >> ");
+							if (hero + heroHab > monster + monsterHab) {
+								message.append("Victoire");
+							} else if (hero + heroHab < monster + monsterHab) {
+								message.append("Défaite");
+							} else {
+								message.append("Egalité");
+							}
+							bot.sendMessage(channel, message.toString());
+						}
+						break;
+					default:
+						throw new IllegalArgumentException("illegal value <" + dices.getMode() + ">");
 				}
+
 				dices.close();
 			}
 		}

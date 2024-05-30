@@ -12,7 +12,6 @@ import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.common.events.domain.EventUser;
 
-import shionn.hexas.DiceMode;
 import shionn.hexas.Dices;
 
 @Component
@@ -36,40 +35,49 @@ public class ChannelMessageEventConsumer implements Consumer<ChannelMessageEvent
 			bot.sendMessage(event.getChannel().getName(), "J'ai recu ton test @" + user.getName());
 		}
 		if ("!2d6".equalsIgnoreCase(event.getMessage())) {
-
-			int dice = D6(seed) + D6(seed);
-			doDice(event, dice, DiceMode.TWO_D6);
-
+			switch (dices.getMode()) {
+				case CLOSED:
+					bot.sendMessage(event.getChannel().getName(),
+							"/me @" + user.getName() + " pas de lancer de des en ce moment");
+					break;
+				case D6:
+					bot.sendMessage(event.getChannel().getName(), "/me @" + user.getName() + " mauvais lancé");
+					break;
+				case TWO_D6:
+				case BATTLE:
+					int dice = D6(seed) + D6(seed);
+						if (dices.put(user.getName(), dice)) {
+							bot.sendMessage(event.getChannel().getName(),
+									"/me @" + user.getName() + " obtiens " + dice);
+						} else {
+							bot.sendMessage(event.getChannel().getName(),
+									"/me @" + user.getName() + " a déjà fait son lancé");
+						}
+					break;
+			}
 		}
 		if ("!d6".equalsIgnoreCase(event.getMessage())) {
-			int dice = D6(seed);
-			doDice(event, dice, DiceMode.D6);
-		}
-
-	}
-
-	private void doDice(ChannelMessageEvent event, int dice, DiceMode mode) {
-		EventUser user = event.getUser();
-		TwitchChat bot = event.getTwitchChat();
-		switch (dices.getMode()) {
-			case CLOSED:
-				bot.sendMessage(event.getChannel().getName(),
-						"/me @" + user.getName() + " pas de lancer de des en ce moment");
-				break;
-			case TWO_D6:
-			case D6:
-				if (mode == dices.getMode()) {
+			switch (dices.getMode()) {
+				case CLOSED:
+					bot.sendMessage(event.getChannel().getName(),
+							"/me @" + user.getName() + " pas de lancer de des en ce moment");
+					break;
+				case TWO_D6:
+				case BATTLE:
+					bot.sendMessage(event.getChannel().getName(), "/me @" + user.getName() + " mauvais lancé");
+					break;
+				case D6:
+					int dice = D6(seed);
 					if (dices.put(user.getName(), dice)) {
 						bot.sendMessage(event.getChannel().getName(), "/me @" + user.getName() + " obtiens " + dice);
 					} else {
 						bot.sendMessage(event.getChannel().getName(),
 								"/me @" + user.getName() + " a déjà fait son lancé");
 					}
-				} else {
-					bot.sendMessage(event.getChannel().getName(), "/me @" + user.getName() + " mauvais lancé");
-				}
-				break;
+					break;
+			}
 		}
+
 	}
 
 	private int D6(Random seed) {
