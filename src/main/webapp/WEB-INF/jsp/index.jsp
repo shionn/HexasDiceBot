@@ -39,7 +39,14 @@
 		</div>
 	</fieldset>
 </form:form>
-<h1>HeroQuest</h1>
+<h1>JDR</h1>
+<h2>Lancer</h2>
+
+
+<h2>Configuration Joueur</h2>
+
+
+<h1>HeroQuest (Non fini ne marche pas)</h1>
 <spring:url value="/heroquest/atk" var="url" />
 <form:form action="${url}" method="POST" class="pure-form pure-form-stacked">
 	<fieldset>
