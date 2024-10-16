@@ -24,8 +24,8 @@
 	<c:if test="${jdr.enable}">Désactiver JDR</c:if>
 	<c:if test="${not jdr.enable}">Activer JDR</c:if>
 </a>
-<hr>
 
+<h2>Joueur enregistrés</h2>
 <table class="pure-table">
 	<tr>
 		<th>Joueur</th><th>Classe</th><th>#</th>
@@ -39,7 +39,7 @@
 	</c:forEach>
 </table>
 
-<h1>Configuration</h1>
+<h2>Configuration</h2>
 <spring:url value="/jdr/add-player" var="url" />
 <form:form action="${url}" method="POST" class="pure-form pure-form-stacked">
 	<fieldset>
