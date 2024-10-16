@@ -1,4 +1,4 @@
-package shionn.hexas;
+package shionn.hexas.ldvelh;
 
 public enum DiceMode {
 

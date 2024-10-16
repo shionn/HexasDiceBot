@@ -20,6 +20,10 @@
 <h1>Commandes</h1>
 <a href="<spring:url value="/dice/1D6"/>" class="pure-button">Demander 1D6</a>
 <a href="<spring:url value="/dice/2D6"/>" class="pure-button">Demander 2D6</a>
+<a href="<spring:url value="/ldvelh/enable"/>" class="pure-button">
+	<c:if test="${ldvelh.enable}">Désactiver Ldvelh</c:if>
+	<c:if test="${not ldvelh.enable}">Activer Ldvelh</c:if>
+</a>
 <h1>Combat</h1>
 <spring:url value="/dice/battle" var="url" />
 <form:form action="${url}" method="POST" class="pure-form pure-form-stacked">

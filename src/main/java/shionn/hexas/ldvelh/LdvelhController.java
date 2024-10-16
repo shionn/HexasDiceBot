@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import shionn.hexas.command.DiceCommand;
-
 @Controller
 public class LdvelhController {
 
@@ -16,6 +14,12 @@ public class LdvelhController {
 
 	@Autowired
 	private Ldvelh ldvelh;
+
+	@GetMapping("/ldvelh/enable")
+	public String enable() {
+		ldvelh.setEnable(!ldvelh.isEnable());
+		return "redirect:/";
+	}
 
 	@GetMapping("/dice/2D6")
 	public String request2D6() {

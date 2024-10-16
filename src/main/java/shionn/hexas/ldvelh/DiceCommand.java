@@ -1,4 +1,4 @@
-package shionn.hexas.command;
+package shionn.hexas.ldvelh;
 
 import java.util.Collection;
 import java.util.Random;
@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import com.github.twitch4j.chat.ITwitchChat;
-
-import shionn.hexas.DiceMode;
-import shionn.hexas.Dices;
 
 @Component
 @ApplicationScope

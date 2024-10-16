@@ -8,6 +8,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import shionn.hexas.bot.BotClient;
 
 @Component
@@ -16,6 +17,9 @@ import shionn.hexas.bot.BotClient;
 public class Jdr {
 
 	private final BotClient bot;
+	@Getter
+	@Setter
+	private boolean enable;
 	@Getter
 	private List<Player> players = new ArrayList<Player>();
 	
@@ -28,6 +32,10 @@ public class Jdr {
 		if (players.removeIf(p->p.getName().equals(name))) {
 			bot.sendMessage(name+" n'est plus un joueur");
 		}
+	}
+
+	public Player getPlayer(String name) {
+		return players.stream().filter(p -> p.getName().equals(name)).findAny().orElse(null);
 	}
 	
 }

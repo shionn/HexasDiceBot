@@ -1,4 +1,4 @@
-package shionn.hexas.bot;
+package shionn.hexas.ldvelh;
 
 import java.util.Random;
 import java.util.function.Consumer;
@@ -12,30 +12,29 @@ import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.common.events.domain.EventUser;
 
-import shionn.hexas.Dices;
-
 @Component
 @Scope("singleton")
-public class ChannelMessageEventConsumer implements Consumer<ChannelMessageEvent> {
+public class LdvelhChannelMessageEventConsumer implements Consumer<ChannelMessageEvent> {
+
 	private Random seed = new Random();
 
 	@Autowired
 	private Dices dices;
 
-	public ChannelMessageEventConsumer(ITwitchChat bot) {
+	@Autowired
+	private Ldvelh ldvelh;
+
+	public LdvelhChannelMessageEventConsumer(ITwitchChat bot) {
 		bot.getEventManager().onEvent(ChannelMessageEvent.class, this);
 	}
 
 	@Override
 	public void accept(ChannelMessageEvent event) {
 		EventUser user = event.getUser();
-		System.out.println(event.getChannel().getName() + ":" + user.getName() + ":" + event.getMessage());
-		TwitchChat bot = event.getTwitchChat();
-		if ("!test".equals(event.getMessage())) {
-			bot.sendMessage(event.getChannel().getName(), "J'ai recu ton test @" + user.getName());
-		}
-		if ("!2d6".equalsIgnoreCase(event.getMessage())) {
-			switch (dices.getMode()) {
+		if (ldvelh.isEnable()) {
+			TwitchChat bot = event.getTwitchChat();
+			if ("!2d6".equalsIgnoreCase(event.getMessage())) {
+				switch (dices.getMode()) {
 				case CLOSED:
 					bot.sendMessage(event.getChannel().getName(),
 							"/me @" + user.getName() + " pas de lancer de des en ce moment");
@@ -46,18 +45,17 @@ public class ChannelMessageEventConsumer implements Consumer<ChannelMessageEvent
 				case TWO_D6:
 				case BATTLE:
 					int dice = D6(seed) + D6(seed);
-						if (dices.put(user.getName(), dice)) {
-							bot.sendMessage(event.getChannel().getName(),
-									"/me @" + user.getName() + " obtiens " + dice);
-						} else {
-							bot.sendMessage(event.getChannel().getName(),
-									"/me @" + user.getName() + " a déjà fait son lancé");
-						}
+					if (dices.put(user.getName(), dice)) {
+						bot.sendMessage(event.getChannel().getName(), "/me @" + user.getName() + " obtiens " + dice);
+					} else {
+						bot.sendMessage(event.getChannel().getName(),
+								"/me @" + user.getName() + " a déjà fait son lancé");
+					}
 					break;
+				}
 			}
-		}
-		if ("!d6".equalsIgnoreCase(event.getMessage())) {
-			switch (dices.getMode()) {
+			if ("!d6".equalsIgnoreCase(event.getMessage())) {
+				switch (dices.getMode()) {
 				case CLOSED:
 					bot.sendMessage(event.getChannel().getName(),
 							"/me @" + user.getName() + " pas de lancer de des en ce moment");
@@ -75,6 +73,7 @@ public class ChannelMessageEventConsumer implements Consumer<ChannelMessageEvent
 								"/me @" + user.getName() + " a déjà fait son lancé");
 					}
 					break;
+				}
 			}
 		}
 

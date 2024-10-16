@@ -1,15 +1,16 @@
 package shionn.hexas.ldvelh;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
 
 import lombok.Data;
 
 @Component
-@SessionScope
+@Scope("singleton")
 @Data
 public class Ldvelh {
 
+	private boolean enable;
 	private int monsterHab;
 	private int heroHab;
 

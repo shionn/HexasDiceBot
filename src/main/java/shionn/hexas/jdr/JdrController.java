@@ -20,6 +20,12 @@ public class JdrController {
 		return new ModelAndView("jdr").addObject("jdr", jdr);
 	}
 
+	@GetMapping(path = "/jdr/enable")
+	public String jdrEnable() {
+		jdr.setEnable(!jdr.isEnable());
+		return "redirect:/jdr";
+	}
+
 	@PostMapping(path = "/jdr/add-player")
 	public String addPlayer(@RequestParam("name") String name,@RequestParam("clazz") String clazz) {
 		jdr.add(Player.builder().name(name).clazz(clazz).build());

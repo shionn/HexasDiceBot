@@ -20,10 +20,12 @@
 
 <h1>JDR</h1>
 
+<a href="<spring:url value="/jdr/enable"/>" class="pure-button">
+	<c:if test="${jdr.enable}">Désactiver JDR</c:if>
+	<c:if test="${not jdr.enable}">Activer JDR</c:if>
+</a>
+<hr>
 
-<h1>Configuration Joueur</h1>
-
-<h2>Liste des joueurs</h2>
 <table class="pure-table">
 	<tr>
 		<th>Joueur</th><th>Classe</th><th>#</th>
@@ -37,7 +39,7 @@
 	</c:forEach>
 </table>
 
-<h2>Ajouter un joueur</h2>
+<h1>Configuration</h1>
 <spring:url value="/jdr/add-player" var="url" />
 <form:form action="${url}" method="POST" class="pure-form pure-form-stacked">
 	<fieldset>
