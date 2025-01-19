@@ -68,7 +68,7 @@ public class JdrController {
 			int roll = dice.roll(1, 20);
 			int mod = jdr.mod(player.getDexterity());
 			player.setPriority(roll + mod);
-			String message = "Priorité : @" + player.getName() + " obtient " + roll;
+			String message = "/me Priorité : @" + player.getName() + " obtient " + roll;
 			if (mod < 0) {
 				message += "-";
 			} else {
