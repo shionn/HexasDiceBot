@@ -69,12 +69,10 @@ public class JdrController {
 			int mod = jdr.mod(player.getDexterity());
 			player.setPriority(roll + mod);
 			String message = "/me Priorité : @" + player.getName() + " obtient " + roll;
-			if (mod < 0) {
-				message += "-";
-			} else {
+			if (mod >= 0) {
 				message += "+";
 			}
-			message += mod + "=" + (roll + mod);
+			message += mod + "=" + player.getPriority();
 			bot.sendMessage(message);
 			dao.updatePriority(player);
 		});
