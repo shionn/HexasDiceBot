@@ -2,9 +2,9 @@ package shionn.hexas.jdr;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Consumer;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,6 +16,9 @@ import com.github.twitch4j.common.events.domain.EventUser;
 import com.google.code.regexp.Matcher;
 import com.google.code.regexp.Pattern;
 
+import shionn.hexas.db.SessionFactory;
+import shionn.hexas.jdr.dao.JdrPlayersDao;
+
 @Component
 @Scope("singleton")
 public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEvent> {
@@ -24,10 +27,14 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 	private static final Pattern ONE_DICE = Pattern.compile("![dD](\\d{1,3})$");
 	private static final Pattern MULTI_DICE = Pattern.compile("!(\\d{1,2})[dD](\\d{1,3})$");
 
-	private Random seed = new Random();
+	@Autowired
+	private Dice dice;
 
 	@Autowired
 	private Jdr jdr;
+
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	public JdrChannelMessageEventConsumer(ITwitchChat bot) {
 		bot.getEventManager().onEvent(ChannelMessageEvent.class, this);
@@ -37,7 +44,7 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 	public void accept(ChannelMessageEvent event) {
 		if (jdr.isEnable()) {
 			EventUser user = event.getUser();
-			Player player = jdr.getPlayer(user.getName());
+			Player player = retreivePlayer(user);
 			if (player != null) {
 				Matcher m = ONE_DICE.matcher(event.getMessage());
 				if (m.find()) {
@@ -75,12 +82,14 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 	}
 
 	private int Dice(int count, int max) {
-		int result = 0;
-		while (count > 0) {
-			result += seed.nextInt(1, max + 1);
-			count--;
+		return dice.roll(count, max);
+	}
+
+	private Player retreivePlayer(EventUser user) {
+		try (SqlSession session = sessionFactory.open()) {
+			JdrPlayersDao dao = session.getMapper(JdrPlayersDao.class);
+			return dao.read(user.getName());
 		}
-		return result;
 	}
 
 }

@@ -108,6 +108,19 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Persistence / MyBatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.13</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>com.github.twitch4j</groupId>
 			<artifactId>twitch4j</artifactId>
@@ -122,4 +135,20 @@
 		</dependency>
 
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>proxmox</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<mybatis.driver>com.mysql.cj.jdbc.Driver</mybatis.driver>
+				<mybatis.url>jdbc:mysql://${hexas.mysql.host}:3306/hexas?serverTimezone=GMT</mybatis.url>
+				<mybatis.username>${hexas.mysql.user}</mybatis.username>
+				<mybatis.password>${hexas.mysql.pass}</mybatis.password>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

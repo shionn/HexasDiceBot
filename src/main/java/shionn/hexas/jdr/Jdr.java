@@ -1,41 +1,41 @@
 package shionn.hexas.jdr;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import shionn.hexas.bot.BotClient;
 
 @Component
 @ApplicationScope
 @RequiredArgsConstructor
 public class Jdr {
 
-	private final BotClient bot;
 	@Getter
 	@Setter
 	private boolean enable;
-	@Getter
-	private List<Player> players = new ArrayList<Player>();
-	
-	public void add(Player player) {
-		players.add(player);
-		bot.sendMessage(player.getName()+" est enregistrer comme "+player.getClazz());
+
+	public int mod(int stat) {
+		if (stat <=1) return -5;
+		if (stat <=3) return -4;
+		if (stat <=5) return -3;
+		if (stat <=7) return -2;
+		if (stat <=9) return -1;
+		if (stat >=12) return 1;
+		if (stat >=14) return 2;
+		if (stat >=16) return 3;
+		if (stat >=18) return 4;
+		if (stat >=20) return 5;
+		return 0;
 	}
 
-	public void rm(String name) {
-		if (players.removeIf(p->p.getName().equals(name))) {
-			bot.sendMessage(name+" n'est plus un joueur");
+	public String strmod(int stat) {
+		int mod = mod(stat);
+		if (mod < 0) {
+			return Integer.toString(mod);
 		}
+		return "+" + Integer.toString(mod);
 	}
 
-	public Player getPlayer(String name) {
-		return players.stream().filter(p -> p.getName().equals(name)).findAny().orElse(null);
-	}
-	
 }
