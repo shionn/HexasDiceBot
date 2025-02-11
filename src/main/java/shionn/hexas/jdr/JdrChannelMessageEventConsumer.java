@@ -48,28 +48,30 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 			if (player != null) {
 				Matcher m = ONE_DICE.matcher(event.getMessage());
 				if (m.find()) {
-					rollDice(1, Integer.parseInt(m.group(1)), event);
+					rollDice(player, 1, Integer.parseInt(m.group(1)), event);
 				}
 				m = MULTI_DICE.matcher(event.getMessage());
 				if (m.find()) {
-					rollDice(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), event);
+					rollDice(player, Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), event);
 				}
 			}
 		}
 	}
 
-	private void rollDice(int count, int dice, ChannelMessageEvent event) {
+	private void rollDice(Player player, int count, int dice, ChannelMessageEvent event) {
 		EventUser user = event.getUser();
 		TwitchChat bot = event.getTwitchChat();
 		if (isValid(count, dice)) {
+			int diceValue = Dice(count, dice);
+			String message;
 			if (count == 1) {
-				bot.sendMessage(event.getChannel().getName(),
-						"/me @" + user.getName() + " obtient " + Dice(count, dice) + " sur son D" + dice);
-
+				message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + diceValue + " sur son D"
+						+ dice;
 			} else {
-				bot.sendMessage(event.getChannel().getName(),
-						"/me @" + user.getName() + " obtient " + Dice(count, dice) + " sur ces " + count + "D" + dice);
+				message = "/me " + player.getPseudo() + " (@" + user.getName() + ") obtient " + diceValue + " sur ces "
+						+ count + "D" + dice;
 			}
+			bot.sendMessage(event.getChannel().getName(), message);
 		}
 	}
 
@@ -88,7 +90,7 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 	private Player retreivePlayer(EventUser user) {
 		try (SqlSession session = sessionFactory.open()) {
 			JdrPlayersDao dao = session.getMapper(JdrPlayersDao.class);
-			return dao.read(user.getName());
+			return dao.readByPseudo(user.getName());
 		}
 	}
 

@@ -14,6 +14,7 @@ import lombok.Setter;
 public class Player {
 
 	private int id;
+	private String pseudo;
 	private String name;
 	private String clazz;
 
