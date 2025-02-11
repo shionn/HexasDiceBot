@@ -62,13 +62,13 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 		EventUser user = event.getUser();
 		TwitchChat bot = event.getTwitchChat();
 		if (isValid(count, dice)) {
-			int diceValue = Dice(count, dice);
+			int roll = Dice(count, dice);
 			String message;
 			if (count == 1) {
-				message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + diceValue + " sur son D"
+				message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll + " sur son D"
 						+ dice;
 			} else {
-				message = "/me " + player.getPseudo() + " (@" + user.getName() + ") obtient " + diceValue + " sur ces "
+				message = "/me " + player.getPseudo() + " (@" + user.getName() + ") obtient " + roll + " sur ces "
 						+ count + "D" + dice;
 			}
 			bot.sendMessage(event.getChannel().getName(), message);
