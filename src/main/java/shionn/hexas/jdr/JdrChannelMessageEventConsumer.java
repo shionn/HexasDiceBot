@@ -24,7 +24,7 @@ import shionn.hexas.jdr.dao.JdrPlayersDao;
 public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEvent> {
 
 	private static final List<Integer> DICES = Arrays.asList(4, 6, 8, 10, 12, 20, 100);
-	private static final Pattern ONE_DICE = Pattern.compile("![dD](\\d{1,3})$");
+	private static final Pattern ONE_DICE = Pattern.compile("![dD](\\d{1,3})( [a-z]{3})?$");
 	private static final Pattern MULTI_DICE = Pattern.compile("!(\\d{1,2})[dD](\\d{1,3})$");
 
 	@Autowired
@@ -48,29 +48,34 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 			if (player != null) {
 				Matcher m = ONE_DICE.matcher(event.getMessage());
 				if (m.find()) {
-					rollDice(player, 1, Integer.parseInt(m.group(1)), event);
+					rollOneDice(player, Integer.parseInt(m.group(1)), event);
 				}
 				m = MULTI_DICE.matcher(event.getMessage());
 				if (m.find()) {
-					rollDice(player, Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), event);
+					rollMultiDice(player, Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), event);
 				}
 			}
 		}
 	}
 
-	private void rollDice(Player player, int count, int dice, ChannelMessageEvent event) {
+	private void rollOneDice(Player player, int dice, ChannelMessageEvent event) {
+		EventUser user = event.getUser();
+		TwitchChat bot = event.getTwitchChat();
+		if (isValid(1, dice)) {
+			int roll = Dice(1, dice);
+			String message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll + " sur son D"
+					+ dice;
+			bot.sendMessage(event.getChannel().getName(), message);
+		}
+	}
+
+	private void rollMultiDice(Player player, int count, int dice, ChannelMessageEvent event) {
 		EventUser user = event.getUser();
 		TwitchChat bot = event.getTwitchChat();
 		if (isValid(count, dice)) {
 			int roll = Dice(count, dice);
-			String message;
-			if (count == 1) {
-				message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll + " sur son D"
-						+ dice;
-			} else {
-				message = "/me " + player.getPseudo() + " (@" + user.getName() + ") obtient " + roll + " sur ces "
-						+ count + "D" + dice;
-			}
+			String message = "/me " + player.getPseudo() + " (@" + user.getName() + ") obtient " + roll + " sur ces "
+					+ count + "D" + dice;
 			bot.sendMessage(event.getChannel().getName(), message);
 		}
 	}
