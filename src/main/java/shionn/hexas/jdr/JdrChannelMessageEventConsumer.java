@@ -48,7 +48,7 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 			if (player != null) {
 				Matcher m = ONE_DICE.matcher(event.getMessage());
 				if (m.find()) {
-					rollOneDice(player, Integer.parseInt(m.group(1)), event);
+					rollOneDice(player, Integer.parseInt(m.group(1)), m.group(2), event);
 				}
 				m = MULTI_DICE.matcher(event.getMessage());
 				if (m.find()) {
@@ -58,13 +58,26 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 		}
 	}
 
-	private void rollOneDice(Player player, int dice, ChannelMessageEvent event) {
+	private void rollOneDice(Player player, int dice, String mod, ChannelMessageEvent event) {
 		EventUser user = event.getUser();
 		TwitchChat bot = event.getTwitchChat();
 		if (isValid(1, dice)) {
 			int roll = Dice(1, dice);
-			String message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll + " sur son D"
-					+ dice;
+			String message;
+			if (mod != null) {
+				try {
+					int stat = player.getStat(mod);
+					int total = roll + jdr.mod(stat);
+					message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll
+							+ jdr.strmod(stat) + "=" + total + " sur son D" + dice;
+					bot.sendMessage(event.getChannel().getName(), message);
+				} catch (IllegalArgumentException e) {
+					message = "/me @" + user.getName() + " je ne comprend pas : " + mod;
+				}
+			} else {
+				message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll + " sur son D"
+						+ dice;
+			}
 			bot.sendMessage(event.getChannel().getName(), message);
 		}
 	}
