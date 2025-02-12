@@ -24,7 +24,7 @@ import shionn.hexas.jdr.dao.JdrPlayersDao;
 public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEvent> {
 
 	private static final List<Integer> DICES = Arrays.asList(4, 6, 8, 10, 12, 20, 100);
-	private static final Pattern ONE_DICE = Pattern.compile("![dD](\\d{1,3})( [a-z]{3})?$");
+	private static final Pattern ONE_DICE = Pattern.compile("!1?[dD](\\d{1,3})( [a-z]{3})?$");
 	private static final Pattern MULTI_DICE = Pattern.compile("!(\\d{1,2})[dD](\\d{1,3})$");
 
 	@Autowired
@@ -49,10 +49,11 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 				Matcher m = ONE_DICE.matcher(event.getMessage());
 				if (m.find()) {
 					rollOneDice(player, Integer.parseInt(m.group(1)), m.group(2), event);
-				}
-				m = MULTI_DICE.matcher(event.getMessage());
-				if (m.find()) {
-					rollMultiDice(player, Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), event);
+				} else {
+					m = MULTI_DICE.matcher(event.getMessage());
+					if (m.find()) {
+						rollMultiDice(player, Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), event);
+					}
 				}
 			}
 		}
@@ -66,11 +67,11 @@ public class JdrChannelMessageEventConsumer implements Consumer<ChannelMessageEv
 			String message;
 			if (mod != null) {
 				try {
-					int stat = player.getStat(mod);
+					int stat = player.getStat(mod.trim());
 					int total = roll + jdr.mod(stat);
 					message = "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll
-							+ jdr.strmod(stat) + "=" + total + " sur son D" + dice;
-					bot.sendMessage(event.getChannel().getName(), message);
+							+ jdr.strmod(stat) + "=" + total + " sur son D" + dice + " sur "
+							+ jdr.laStatName(mod.trim());
 				} catch (IllegalArgumentException e) {
 					message = "/me @" + user.getName() + " je ne comprend pas : " + mod;
 				}

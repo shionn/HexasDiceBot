@@ -38,4 +38,18 @@ public class Jdr {
 		return "+" + Integer.toString(mod);
 	}
 
+	public String laStatName(String mod) {
+		return switch (mod) {
+		case "for" -> "la force";
+		case "str" -> "la force";
+		case "dex" -> "la déxterité";
+		case "con" -> "la constitution";
+		case "int" -> "l'intéligence";
+		case "sag" -> "la sagesse";
+		case "wis" -> "la sagesse";
+		case "cha" -> "la charisme";
+		default -> throw new IllegalArgumentException("Unexpected value: " + mod);
+		};
+	}
+
 }
