@@ -42,6 +42,11 @@ public class JdrController {
 		return "redirect:/jdr";
 	}
 
+	@GetMapping(path = "/jdr/dice-view")
+	public ModelAndView jdrDiceView() {
+		return new ModelAndView("jdr-dice-view");
+	}
+
 	@PostMapping(path = "/jdr/add-player")
 	public String addPlayer(@RequestParam("pseudo") String pseudo, @RequestParam("name") String name,
 			@RequestParam("clazz") String clazz, @RequestParam("strenght") int strenght,

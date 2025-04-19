@@ -14,6 +14,8 @@
 	<c:if test="${not jdr.enable}">Activer JDR</c:if>
 </a>
 
+<%-- <a href="<spring:url value="/jdr/dice-view"/>" target="_blanck">Open dice view</a> --%>
+
 <h2>Joueur enregistrés</h2>
 <table>
 	<tr>
