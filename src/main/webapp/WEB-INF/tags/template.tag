@@ -24,6 +24,7 @@
 			<ul>
 				<li><a href="<spring:url value="/ldvelh"/>">Livre dont vous êtes le héro</a></li>
 				<li><a href="<spring:url value="/jdr"/>">Jeux de rôle</a></li>
+				<li><a href="<spring:url value="/heroquest"/>">Heroquest</a></li>
 			</ul>
 		</nav>
 	</header>
