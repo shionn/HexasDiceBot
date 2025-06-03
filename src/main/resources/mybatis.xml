@@ -27,5 +27,6 @@
 	</environments>
 	<mappers>
 		<package name="shionn.hexas.jdr.dao"/>
+		<package name="shionn.hexas.heroquest.dao"/>
 	</mappers>
 </configuration>
