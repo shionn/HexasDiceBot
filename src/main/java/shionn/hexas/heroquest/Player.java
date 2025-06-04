@@ -19,4 +19,6 @@ public class Player {
 	
 	private int attack, defence, body, mind;
 
+	private boolean enable;
+
 }

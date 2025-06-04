@@ -26,4 +26,7 @@ public interface HeroQuestDao {
 			+ "WHERE id = #{id} ")
 	void editPlayer(Player player);
 
+	@Update("UPDATE heroquest_player SET enable = #{enable} WHERE id = #{id}")
+	void updateEnable(Player player);
+
 }

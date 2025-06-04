@@ -77,6 +77,16 @@ public class HeroQuestController {
 		return "redirect:/heroquest";
 	}
 
+	@GetMapping(path = "/heroquest/enable-player/{id}")
+	public String enablePlayer(@PathVariable("id") int id) {
+		HeroQuestDao dao = session.getMapper(HeroQuestDao.class);
+		Player player = dao.readPlayer(id);
+		player.setEnable(!player.isEnable());
+		dao.updateEnable(player);
+		session.commit();
+		return "redirect:/heroquest";
+	}
+
 //	@Autowired
 //	private ITwitchChat bot;
 //	@Autowired

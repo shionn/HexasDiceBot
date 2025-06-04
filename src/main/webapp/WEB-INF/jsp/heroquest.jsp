@@ -20,7 +20,7 @@
 <table>
 	<tr>
 		<th>Pseudo</th><th>Nom</th>
-		<th>Attaque</th><th>Défense</th><th>PV</th><th>Esprit</th>
+		<th>Attaque</th><th>Défense</th><th>PV</th><th>Esprit</th><th>Actif</th>
 		<th>#</th>
 	</tr>
 	<c:forEach items="${players}" var="player">
@@ -31,7 +31,12 @@
 			<td>${player.defence}</td>
 			<td>${player.body}</td>
 			<td>${player.mind}</td>
+			<td>${player.enable?"oui":"non"}</td>
 			<td>
+				<a href="<spring:url value="/heroquest/enable-player/${player.id}"/>">
+					<c:if test="${player.enable}">Désactiver</c:if>
+					<c:if test="${not player.enable}">Activer</c:if>
+				</a>
 				<a href="<spring:url value="/heroquest/edit-player/${player.id}"/>">Editer</a>
 				<a href="<spring:url value="/heroquest/del-player/${player.id}"/>">Supprimer</a>
 			</td>
