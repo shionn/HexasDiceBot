@@ -44,8 +44,6 @@
 	</c:forEach>
 </table>
 
-<!-- <h2>Action</h2> -->
-
 <h2>
 	<c:if test="${empty player}">Ajouter un joueur</c:if>
 	<c:if test="${not empty player}">Editer un joueur</c:if>
