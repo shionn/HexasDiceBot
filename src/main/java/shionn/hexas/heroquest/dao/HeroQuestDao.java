@@ -29,4 +29,7 @@ public interface HeroQuestDao {
 	@Update("UPDATE heroquest_player SET enable = #{enable} WHERE id = #{id}")
 	void updateEnable(Player player);
 
+	@Select("SELECT * FROM heroquest_player WHERE pseudo = #{name} AND enable IS TRUE")
+	Player readByPseudo(String name);
+
 }

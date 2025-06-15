@@ -1,5 +1,6 @@
 package shionn.hexas.bot;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class BotClient {
+public class BotClient implements DisposableBean {
 
 	@Autowired
 	@Value("${twitch.channel}")
@@ -22,5 +23,9 @@ public class BotClient {
 		bot.sendMessage(channel, message);
 	}
 
+	@Override
+	public void destroy() throws Exception {
+		bot.close();
+	}
 	
 }

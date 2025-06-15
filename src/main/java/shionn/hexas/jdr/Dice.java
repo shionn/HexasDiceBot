@@ -10,7 +10,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 public class Dice {
 	private Random seed = new Random();
 
-	int roll(int count, int max) {
+	public int roll(int count, int max) {
 		int result = 0;
 		while (count > 0) {
 			result += seed.nextInt(1, max + 1);
