@@ -20,7 +20,8 @@
 <table>
 	<tr>
 		<th>Pseudo</th><th>Nom</th>
-		<th>Attaque</th><th>Défense</th><th>PV</th><th>Esprit</th><th>Actif</th>
+		<th>Attaque</th><th>Défense</th><th>PV</th><th>Esprit</th><th>Perception</th>
+		<th>Actif</th>
 		<th>#</th>
 	</tr>
 	<c:forEach items="${players}" var="player">
@@ -31,6 +32,7 @@
 			<td>${player.defence}</td>
 			<td>${player.body}</td>
 			<td>${player.mind}</td>
+			<td>${player.perc}</td>
 			<td>${player.enable?"oui":"non"}</td>
 			<td>
 				<a href="<spring:url value="/heroquest/enable-player/${player.id}"/>">
@@ -53,7 +55,7 @@
 	<spring:url value="/heroquest/edit-player/${player.id}" var="url" />
 </c:if>
 <form:form action="${url}" method="POST">
-	<label for="name">Pseudo</label>
+	<label for="pseudo">Pseudo</label>
 	<input type="text" id="pseudo" name="pseudo" value="${player.pseudo}"/>
 	<label for="name">Nom</label>
 	<input type="text" id="name" name="name" value="${player.name}"/>
@@ -61,10 +63,12 @@
 	<input type="text" id="attack" name="attack" value="${player.attack}"/>
 	<label for="defence">Défense</label>
 	<input type="text" id="defence" name="defence" value="${player.defence}"/>
-	<label for="clazz">PV</label>
+	<label for="body">PV</label>
 	<input type="text" id="body" name="body" value="${player.body}"/>
-	<label for="clazz">Esprit</label>
+	<label for="mind">Esprit</label>
 	<input type="text" id="mind" name="mind" value="${player.mind}"/>
+	<label for="perc">Perception</label>
+	<input type="text" id="perc" name="perc" value="${player.perc}"/>
 	<button type="submit">Valider</button>
 </form:form>
 </jsp:attribute>

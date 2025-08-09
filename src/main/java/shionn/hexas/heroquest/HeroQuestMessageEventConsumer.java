@@ -40,7 +40,13 @@ public class HeroQuestMessageEventConsumer implements Consumer<ChannelMessageEve
 			Player player = retreivePlayer(user);
 			if (player != null) {
 				switch (event.getMessage().trim().toLowerCase()) {
+				case "!d6":
+				case "!1d6":
+					doD6(event, player);
+					break;
 				case "!2d6":
+					do2D6(event, player);
+					break;
 				case "!deplacement":
 				case "!mov":
 					doMove(event, player);
@@ -57,11 +63,15 @@ public class HeroQuestMessageEventConsumer implements Consumer<ChannelMessageEve
 				case "!mind":
 					doSpirit(event, player);
 					break;
+				case "!perception":
+				case "!perc":
+					doPerception(event, player);
+					break;
 				case "!aide":
-					sendMessage(event, "/me !2d6 !deplacement !attaque !defense !esprit");
+					sendMessage(event, "/me !d6 !2d6 !deplacement !attaque !defense !esprit !perception");
 					break;
 				case "!help":
-					sendMessage(event, "/me !mov !atk !def !mind");
+					sendMessage(event, "/me !d6 !2d6 !mov !atk !def !mind !perc");
 					break;
 				case "!test": // nothing to do
 					break;
@@ -70,6 +80,18 @@ public class HeroQuestMessageEventConsumer implements Consumer<ChannelMessageEve
 				}
 			}
 		}
+	}
+
+	private void doD6(ChannelMessageEvent event, Player player) {
+		EventUser user = event.getUser();
+		int roll = dice.roll(1, 6);
+		sendMessage(event, "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll);
+	}
+
+	private void do2D6(ChannelMessageEvent event, Player player) {
+		EventUser user = event.getUser();
+		int roll = dice.roll(2, 6);
+		sendMessage(event, "/me " + player.getName() + " (@" + user.getName() + ") obtient " + roll);
 	}
 
 	private void doDoesNotUnderstand(ChannelMessageEvent event, Player player) {
@@ -84,6 +106,19 @@ public class HeroQuestMessageEventConsumer implements Consumer<ChannelMessageEve
 		int roll = dice.roll(1, 6);
 		String message;
 		if (roll <= player.getMind() + 1) {
+			message = "/me " + player.getName() + " (@" + user.getName() + ") TODO";
+		} else {
+			message = "/me " + player.getName() + " (@" + user.getName() + ") TODO";
+		}
+		bot.sendMessage(event.getChannel().getName(), message);
+	}
+
+	private void doPerception(ChannelMessageEvent event, Player player) {
+		EventUser user = event.getUser();
+		TwitchChat bot = event.getTwitchChat();
+		int roll = dice.roll(1, 6);
+		String message;
+		if (roll <= player.getPerc()) {
 			message = "/me " + player.getName() + " (@" + user.getName() + ") trouve un trésor";
 		} else {
 			message = "/me " + player.getName() + " (@" + user.getName() + ") entend un bruit suspect";

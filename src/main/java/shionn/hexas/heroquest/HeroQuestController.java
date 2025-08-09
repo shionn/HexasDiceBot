@@ -41,7 +41,7 @@ public class HeroQuestController {
 	@PostMapping(path = "/heroquest/add-player")
 	public String addPlayer(@RequestParam("pseudo") String pseudo, @RequestParam("name") String name,
 			@RequestParam("attack") int attack, @RequestParam("defence") int defence, @RequestParam("body") int body,
-			@RequestParam("mind") int mind) {
+			@RequestParam("mind") int mind, @RequestParam("perc") int perc) {
 		session
 				.getMapper(HeroQuestDao.class)
 				.createPlayer(Player
@@ -52,6 +52,7 @@ public class HeroQuestController {
 						.defence(defence)
 						.body(body)
 						.mind(mind)
+						.perc(perc)
 						.build());
 		session.commit();
 		return "redirect:/heroquest";
@@ -60,7 +61,7 @@ public class HeroQuestController {
 	@PostMapping(path = "/heroquest/edit-player/{id}")
 	public String addPlayer(@PathVariable("id") int id, @RequestParam("pseudo") String pseudo,
 			@RequestParam("name") String name, @RequestParam("attack") int attack, @RequestParam("defence") int defence,
-			@RequestParam("body") int body, @RequestParam("mind") int mind) {
+			@RequestParam("body") int body, @RequestParam("mind") int mind, @RequestParam("perc") int perc) {
 		session
 				.getMapper(HeroQuestDao.class)
 				.editPlayer(Player
@@ -72,6 +73,7 @@ public class HeroQuestController {
 						.defence(defence)
 						.body(body)
 						.mind(mind)
+						.perc(perc)
 						.build());
 		session.commit();
 		return "redirect:/heroquest";

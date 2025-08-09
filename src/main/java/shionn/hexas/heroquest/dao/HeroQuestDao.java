@@ -22,7 +22,7 @@ public interface HeroQuestDao {
 
 	@Update("UPDATE heroquest_player SET " //
 			+ "pseudo = #{pseudo}, name = #{name}, " //
-			+ "attack = #{attack}, defence = #{defence}, body = #{body}, mind = #{mind} " //
+			+ "attack = #{attack}, defence = #{defence}, body = #{body}, mind = #{mind}, perc = #{perc} " //
 			+ "WHERE id = #{id} ")
 	void editPlayer(Player player);
 

@@ -17,7 +17,7 @@ public class Player {
 	private String pseudo;
 	private String name;
 	
-	private int attack, defence, body, mind;
+	private int attack, defence, body, mind, perc;
 
 	private boolean enable;
 
