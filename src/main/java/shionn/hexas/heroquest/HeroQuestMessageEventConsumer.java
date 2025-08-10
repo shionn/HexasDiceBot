@@ -116,9 +116,11 @@ public class HeroQuestMessageEventConsumer implements Consumer<ChannelMessageEve
 	private void doPerception(ChannelMessageEvent event, Player player) {
 		EventUser user = event.getUser();
 		TwitchChat bot = event.getTwitchChat();
-		int roll = dice.roll(1, 6);
+		int roll = dice.roll(1, 12);
 		String message;
-		if (roll <= player.getPerc()) {
+		if (roll == 12) {
+			message = "/me " + player.getName() + " (@" + user.getName() + ") entant un grognement sinistre";
+		} else if (roll <= player.getPerc()) {
 			message = "/me " + player.getName() + " (@" + user.getName() + ") trouve un trésor";
 		} else {
 			message = "/me " + player.getName() + " (@" + user.getName() + ") entend un bruit suspect";
