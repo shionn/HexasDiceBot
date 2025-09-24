@@ -10,8 +10,8 @@ import shionn.hexas.heroquest.Player;
 
 public interface HeroQuestDao {
 
-	@Insert("INSERT INTO heroquest_player ( pseudo, name, attack, defence, body, mind ) VALUES ( "
-			+ "#{pseudo}, #{name}, #{attack}, #{defence}, #{body}, #{mind} )")
+	@Insert("INSERT INTO heroquest_player ( pseudo, name, attack, defence, body, mind, perc ) VALUES ( "
+			+ "#{pseudo}, #{name}, #{attack}, #{defence}, #{body}, #{mind}, #{perc} )")
 	int createPlayer(Player player);
 
 	@Select("SELECT * FROM heroquest_player ORDER BY name")
