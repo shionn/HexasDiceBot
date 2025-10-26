@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
-import shionn.hexas.bot.BotClient;
+import shionn.hexas.bot.twitch.BotClient;
 import shionn.hexas.jdr.dao.JdrPlayersDao;
 
 @Controller

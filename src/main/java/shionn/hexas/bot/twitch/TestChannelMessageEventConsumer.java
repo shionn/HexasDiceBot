@@ -1,4 +1,4 @@
-package shionn.hexas.bot;
+package shionn.hexas.bot.twitch;
 
 import java.util.function.Consumer;
 

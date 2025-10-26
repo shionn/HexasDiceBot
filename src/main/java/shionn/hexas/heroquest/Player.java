@@ -14,9 +14,9 @@ import lombok.Setter;
 public class Player {
 
 	private int id;
-	private String pseudo;
+	private String pseudo, discord;
 	private String name;
-	
+
 	private int attack, defence, body, mind, perc;
 
 	private boolean enable;

@@ -1,4 +1,4 @@
-package shionn.hexas.bot;
+package shionn.hexas.bot.twitch;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;

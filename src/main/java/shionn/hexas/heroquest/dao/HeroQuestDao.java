@@ -10,8 +10,8 @@ import shionn.hexas.heroquest.Player;
 
 public interface HeroQuestDao {
 
-	@Insert("INSERT INTO heroquest_player ( pseudo, name, attack, defence, body, mind, perc ) VALUES ( "
-			+ "#{pseudo}, #{name}, #{attack}, #{defence}, #{body}, #{mind}, #{perc} )")
+	@Insert("INSERT INTO heroquest_player ( pseudo, discord, name, attack, defence, body, mind, perc ) VALUES ( "
+			+ "#{pseudo}, #{discord}, #{name}, #{attack}, #{defence}, #{body}, #{mind}, #{perc} )")
 	int createPlayer(Player player);
 
 	@Select("SELECT * FROM heroquest_player ORDER BY name")
@@ -21,7 +21,7 @@ public interface HeroQuestDao {
 	Player readPlayer(int id);
 
 	@Update("UPDATE heroquest_player SET " //
-			+ "pseudo = #{pseudo}, name = #{name}, " //
+			+ "pseudo = #{pseudo}, discord = #{discord}, name = #{name}, " //
 			+ "attack = #{attack}, defence = #{defence}, body = #{body}, mind = #{mind}, perc = #{perc} " //
 			+ "WHERE id = #{id} ")
 	void editPlayer(Player player);
@@ -31,5 +31,8 @@ public interface HeroQuestDao {
 
 	@Select("SELECT * FROM heroquest_player WHERE pseudo = #{name} AND enable IS TRUE")
 	Player readByPseudo(String name);
+
+	@Select("SELECT * FROM heroquest_player WHERE discord = #{name} AND enable IS TRUE")
+	Player readByDiscordPseudo(String name);
 
 }

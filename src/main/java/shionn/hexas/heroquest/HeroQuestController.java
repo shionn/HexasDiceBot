@@ -39,14 +39,15 @@ public class HeroQuestController {
 	}
 
 	@PostMapping(path = "/heroquest/add-player")
-	public String addPlayer(@RequestParam("pseudo") String pseudo, @RequestParam("name") String name,
-			@RequestParam("attack") int attack, @RequestParam("defence") int defence, @RequestParam("body") int body,
-			@RequestParam("mind") int mind, @RequestParam("perc") int perc) {
+	public String addPlayer(@RequestParam("pseudo") String pseudo, @RequestParam("discord") String discord,
+			@RequestParam("name") String name, @RequestParam("attack") int attack, @RequestParam("defence") int defence,
+			@RequestParam("body") int body, @RequestParam("mind") int mind, @RequestParam("perc") int perc) {
 		session
 				.getMapper(HeroQuestDao.class)
 				.createPlayer(Player
 						.builder()
 						.pseudo(pseudo)
+						.discord(discord)
 						.name(name)
 						.attack(attack)
 						.defence(defence)
@@ -60,14 +61,16 @@ public class HeroQuestController {
 
 	@PostMapping(path = "/heroquest/edit-player/{id}")
 	public String addPlayer(@PathVariable("id") int id, @RequestParam("pseudo") String pseudo,
-			@RequestParam("name") String name, @RequestParam("attack") int attack, @RequestParam("defence") int defence,
-			@RequestParam("body") int body, @RequestParam("mind") int mind, @RequestParam("perc") int perc) {
+			@RequestParam("discord") String discord, @RequestParam("name") String name,
+			@RequestParam("attack") int attack, @RequestParam("defence") int defence, @RequestParam("body") int body,
+			@RequestParam("mind") int mind, @RequestParam("perc") int perc) {
 		session
 				.getMapper(HeroQuestDao.class)
 				.editPlayer(Player
 						.builder()
 						.id(id)
 						.pseudo(pseudo)
+						.discord(discord)
 						.name(name)
 						.attack(attack)
 						.defence(defence)
