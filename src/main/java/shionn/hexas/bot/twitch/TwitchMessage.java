@@ -16,7 +16,7 @@ public class TwitchMessage implements MessageEvent {
 	@Override
 	public void answer(String message) {
 		String text = message.replaceAll("%USER%", "@" + getPseudo());
-		event.getTwitchChat().sendMessage("/me " + event.getChannel().getName(), text);
+		event.getTwitchChat().sendMessage(event.getChannel().getName(), "/me " + text);
 	}
 
 	@Override
