@@ -111,7 +111,7 @@ public class HeroQuestMessageConsumer {
 		for (int i = 0; i < player.getDefence(); i++) {
 			count += dice.roll(1, 6) >= 5 ? 1 : 0;
 		}
-		String message = player.getName() + " (%USER%) obtient " + count + " 🛡";
+		String message = player.getName() + " (%USER%) obtient " + count + " " + Icons.Shield;
 		sendMessage(event, message);
 	}
 
@@ -120,7 +120,7 @@ public class HeroQuestMessageConsumer {
 		for (int i = 0; i < player.getAttack(); i++) {
 			count += dice.roll(1, 6) >= 4 ? 1 : 0;
 		}
-		String message = player.getName() + " (%USER%) obtient " + count + " 💀";
+		String message = player.getName() + " (%USER%) obtient " + count + " " + Icons.Skull;
 		sendMessage(event, message);
 	}
 
