@@ -24,7 +24,8 @@ public class HeroQuestMessageConsumer {
 		if (heroQuest.isEnable() && event.getMessage().startsWith("!")) {
 			Player player = retreivePlayer(event);
 			if (player != null) {
-				switch (event.getMessage().trim().toLowerCase()) {
+				String[] commands = event.getMessage().trim().split(" ");
+				switch (commands[0].toLowerCase()) {
 				case "!d6":
 				case "!1d6":
 					doD6(event, player);
@@ -50,7 +51,7 @@ public class HeroQuestMessageConsumer {
 					break;
 				case "!perception":
 				case "!perc":
-					doPerception(event, player);
+					doPerception(event, commands, player);
 					break;
 				case "!aide":
 					sendMessage(event, "!d6 !2d6 !deplacement !attaque !defense !esprit !perception");
@@ -85,23 +86,28 @@ public class HeroQuestMessageConsumer {
 	private void doSpirit(MessageEvent event, Player player) {
 		int roll = dice.roll(1, 6);
 		String message;
-		if (roll <= player.getMind() + 1) {
-			message = player.getName() + " (%USER%) TODO";
+		if (roll <= player.getMind()) {
+			message = player.getName() + " (%USER%) Réussite " + roll + "/" + player.getMind();
 		} else {
-			message = player.getName() + " (%USER%) TODO";
+			message = player.getName() + " (%USER%) Echec " + roll + "/" + player.getMind();
 		}
 		sendMessage(event, message);
 	}
 
-	private void doPerception(MessageEvent event, Player player) {
+	private void doPerception(MessageEvent event, String[] commands, Player player) {
 		int roll = dice.roll(1, 12);
 		String message;
+		int bonus = 0;
+		if (commands.length > 1) {
+			bonus = Integer.parseInt(commands[1]);
+		}
+		String resulat = "(" + roll + "/" + player.getPerc() + (bonus >= 0 ? "+" : "") + bonus + ")";
 		if (roll == 12) {
-			message = player.getName() + " (%USER%) entant un grognement sinistre";
-		} else if (roll <= player.getPerc()) {
-			message = player.getName() + " (%USER%) trouve un trésor";
+			message = player.getName() + " (%USER%) entant un grognement sinistre " + resulat;
+		} else if (roll > player.getPerc() + bonus) {
+			message = player.getName() + " (%USER%) trouve rien " + resulat;
 		} else {
-			message = player.getName() + " (%USER%) entend un bruit suspect";
+			message = player.getName() + " (%USER%) trouve quelque chose " + resulat;
 		}
 		sendMessage(event, message);
 	}
