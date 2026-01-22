@@ -33,6 +33,9 @@ public class HeroQuestMessageConsumer {
 				case "!2d6":
 					do2D6(event, player);
 					break;
+				case "!1d12":
+					do1D12(event, player);
+					break;
 				case "!deplacement":
 				case "!mov":
 					doMove(event, player);
@@ -75,6 +78,11 @@ public class HeroQuestMessageConsumer {
 
 	private void do2D6(MessageEvent event, Player player) {
 		int roll = dice.roll(2, 6);
+		sendMessage(event, player.getName() + " (%USER%) obtient " + roll);
+	}
+
+	private void do1D12(MessageEvent event, Player player) {
+		int roll = dice.roll(1, 12);
 		sendMessage(event, player.getName() + " (%USER%) obtient " + roll);
 	}
 
