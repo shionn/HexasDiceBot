@@ -1,5 +1,8 @@
 package shionn.hexas.heroquest;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -103,21 +106,32 @@ public class HeroQuestMessageConsumer {
 	}
 
 	private void doPerception(MessageEvent event, String[] commands, Player player) {
-		int roll = dice.roll(1, 12);
+		List<Integer> dices = dice.multiDices(player.getPerc(), 6);
 		String message;
-		int bonus = 0;
-		if (commands.length > 1) {
-			bonus = Integer.parseInt(commands[1]);
-		}
-		String resulat = "(" + roll + "/" + player.getPerc() + (bonus >= 0 ? "+" : "") + bonus + ")";
-		if (roll == 12) {
-			message = player.getName() + " (%USER%) entant un grognement sinistre " + resulat;
-		} else if (roll > player.getPerc() + bonus) {
-			message = player.getName() + " (%USER%) trouve rien " + resulat;
+		if (count(dices, d -> d == 6) >= 2) {
+			if (count(dices, d -> d == 1) >= 2) {
+				message = player.getName()
+						+ " (%USER%) trouve un magnifique trésors mais entant un grognement sinistre ";
+			} else {
+				message = player.getName() + " (%USER%) trouve un magnifique trésors ";
+			}
+		} else if (count(dices, d -> d == 1) >= 2) {
+			message = player.getName() + " (%USER%) entant un grognement sinistre ";
+		} else if (count(dices, d -> d >= 5) >= 1) {
+			message = player.getName() + " (%USER%) trouve un quelque chose ";
 		} else {
-			message = player.getName() + " (%USER%) trouve quelque chose " + resulat;
+			message = player.getName() + " (%USER%) trouve rien ";
 		}
+		message += "(";
+		for (int d : dices) {
+			message += Icons.Dices[d - 1];
+		}
+		message += ")";
 		sendMessage(event, message);
+	}
+
+	private long count(List<Integer> dices, Predicate<Integer> condition) {
+		return dices.stream().filter(condition).count();
 	}
 
 	private void doDefense(MessageEvent event, Player player) {
